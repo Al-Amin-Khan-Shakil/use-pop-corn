@@ -19,12 +19,13 @@ export default function App() {
   const [watched, setWatched] = useState(tempWatchedData);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const query = 'valobasha';
+  const [query, setQuery] = useState('abc');
 
   useEffect(() => {
     const fetchMovies = async () => {
       try {
         setIsLoading(true);
+        setError('');
         const res = await fetch(
           `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`,
         );
@@ -43,14 +44,21 @@ export default function App() {
       }
     };
 
+    if (!query.length) {
+      setMovies([]);
+      setError('');
+      setWatched(tempWatchedData);
+      return;
+    }
+
     fetchMovies();
-  }, []);
+  }, [query]);
 
   return (
     <>
       <Navbar>
         <Logo />
-        <Search />
+        <Search query={query} setQuery={setQuery} />
         <NumResult movies={movies} />
       </Navbar>
       <Main>
