@@ -21,8 +21,17 @@ html {
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    "Open Sans",
+    "Helvetica Neue",
+    sans-serif;
   color: var(--color-text);
   background-color: var(--color-background-900);
   padding: 2.4rem;
@@ -49,8 +58,8 @@ body {
 }
 
 .box {
-  width: 42rem;
-  max-width: 42rem;
+  width: 45rem;
+  max-width: 45rem;
   background-color: var(--color-background-500);
   border-radius: 0.9rem;
   overflow: scroll;
@@ -280,11 +289,13 @@ body {
 .rating {
   background-color: var(--color-background-100);
   border-radius: 0.9rem;
-  padding: 2rem 2.4rem;
+  padding: 2rem 0;
   margin-bottom: 0.8rem;
   font-weight: 600;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   gap: 2.4rem;
 }
 
@@ -298,6 +309,7 @@ body {
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s;
+  width: 70%;
 }
 
 .btn-add:hover {
@@ -344,3 +356,18 @@ SPACING SYSTEM (px)
 FONT SIZE SYSTEM (px)
 10 / 12 / 14 / 16 / 18 / 20 / 24 / 30 / 36 / 44 /52 / 62 / 74 / 86 / 98
 */
+
+@media (max-width: 1000px) {
+  html {
+    font-size: 50%; /* Adjust the font size as needed */
+  }
+
+  .test p {
+    font-size: 16px !important;
+  }
+
+  .test div span {
+    width: 20px !important;
+    height: 20px !important;
+  }
+}

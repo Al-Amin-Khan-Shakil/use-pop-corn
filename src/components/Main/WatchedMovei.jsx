@@ -1,7 +1,7 @@
-export default function WatchedMovie({ movie }) {
+export default function WatchedMovie({ movie, onDeleteWatched }) {
   return (
     <li>
-      <img src={movie.Poster} alt={`${movie.Title} poster`} />
+      <img src={movie.poster} alt={`${movie.title} poster`} />
       <h3>{movie.Title}</h3>
       <div>
         <p>
@@ -20,6 +20,13 @@ export default function WatchedMovie({ movie }) {
             min
           </span>
         </p>
+        <button
+          className="btn-delete"
+          onClick={() => onDeleteWatched(movie.imdbID)}
+          type="button"
+        >
+          x
+        </button>
       </div>
     </li>
   );

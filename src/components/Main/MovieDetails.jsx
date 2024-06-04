@@ -5,10 +5,19 @@ import ErrorMessage from './ErrorMessage';
 
 const KEY = 'c9ea9aa0';
 
-export default function MovieDetails({ selectedId, onCloseMovie }) {
+export default function MovieDetails({
+  selectedId,
+  onCloseMovie,
+  onAddWatched,
+  watched,
+}) {
   const [movie, setMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [userRating, setUserRating] = useState(0);
+
+  const isWatched = watched.map((movie) => movie.imdbID).includes(selectedId);
+  const watchedUserRating = watched.find((movie) => movie.imdbID === selectedId)?.userRating;
 
   const {
     Title: title,
@@ -22,6 +31,21 @@ export default function MovieDetails({ selectedId, onCloseMovie }) {
     Director: director,
     Genre: genre,
   } = movie;
+
+  const handleAddMovie = () => {
+    const newWatchedMovie = {
+      imdbID: selectedId,
+      title,
+      year,
+      poster,
+      imdbRating: Number(imdbRating),
+      runtime: Number(runtime.split(' ').at(0)),
+      userRating,
+    };
+
+    onAddWatched(newWatchedMovie);
+    onCloseMovie();
+  };
 
   useEffect(() => {
     const getMovieDetails = async () => {
@@ -89,7 +113,34 @@ export default function MovieDetails({ selectedId, onCloseMovie }) {
 
             <section>
               <div className="rating">
-                <StarRating maxRating={10} size={32} />
+                {
+                  !isWatched ? (
+                    <>
+                      <StarRating
+                        maxRating={10}
+                        size={32}
+                        onSetRating={setUserRating}
+                        className="test"
+                        defaultRating={Number(imdbRating)}
+                        color="#fcc410"
+                      />
+                      {userRating > 0 && (
+
+                        <button type="button" className="btn-add" onClick={handleAddMovie}>
+                          + Add to list
+                        </button>
+                      )}
+                    </>
+                  ) : (
+                    <p>
+                      You rated this movie with
+                      {' '}
+                      {watchedUserRating}
+                      {' '}
+                      <span>🌟</span>
+                    </p>
+                  )
+                }
               </div>
 
               <p>
