@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import Navbar from './components/Navbar/Navbar';
 import Main from './components/Main/Main';
-import { tempWatchedData } from './data/tempMovieData';
 import Logo from './components/Navbar/Logo';
 import Search from './components/Navbar/Search';
 import NumResult from './components/Navbar/NumResult';
@@ -17,7 +16,7 @@ const KEY = 'c9ea9aa0';
 
 export default function App() {
   const [movies, setMovies] = useState([]);
-  const [watched, setWatched] = useState(tempWatchedData);
+  const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [query, setQuery] = useState('abc');
@@ -29,6 +28,10 @@ export default function App() {
 
   const handleCloseMovie = () => {
     setSelectedId(null);
+  };
+
+  const handleAddWatche = (movie) => {
+    setWatched((watched) => [...watched, movie]);
   };
 
   useEffect(() => {
@@ -57,7 +60,6 @@ export default function App() {
     if (!query.length) {
       setMovies([]);
       setError('');
-      setWatched(tempWatchedData);
       return;
     }
 
@@ -93,6 +95,7 @@ export default function App() {
             <MovieDetails
               selectedId={selectedId}
               onCloseMovie={handleCloseMovie}
+              onAddWatched={handleAddWatche}
             />
           ) : (
             <>
