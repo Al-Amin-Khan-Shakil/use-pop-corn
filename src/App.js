@@ -11,6 +11,7 @@ import WatchedMovieList from './components/Main/WatchedMovieList';
 import Loader from './components/Main/Loader';
 import ErrorMessage from './components/Main/ErrorMessage';
 import MovieDetails from './components/Main/MovieDetails';
+import Instruction from './components/Main/Instruction';
 
 const KEY = 'c9ea9aa0';
 
@@ -19,7 +20,7 @@ export default function App() {
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const [query, setQuery] = useState('abc');
+  const [query, setQuery] = useState('Avengers');
   const [selectedId, setSelectedId] = useState(null);
 
   const handleSelectMovie = (id) => {
@@ -39,12 +40,15 @@ export default function App() {
   };
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchMovies = async () => {
       try {
         setIsLoading(true);
         setError('');
         const res = await fetch(
           `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`,
+          { signal: controller.signal },
         );
 
         if (!res.ok) throw new Error('Something went wrong with fetching movies.');
@@ -54,20 +58,27 @@ export default function App() {
         if (data.Response === 'False') throw new Error('Movie not found');
 
         setMovies(data.Search);
-      } catch (err) {
-        setError(err.message);
-      } finally {
+        setError('');
         setIsLoading(false);
+      } catch (err) {
+        if (err.name === 'AbortError') {
+          setIsLoading(true);
+        } else {
+          setError(err.message);
+        }
       }
     };
 
     if (!query.length) {
       setMovies([]);
       setError('');
-      return;
     }
 
     fetchMovies();
+
+    return () => {
+      controller.abort();
+    };
   }, [query]);
 
   return (
@@ -88,11 +99,12 @@ export default function App() {
           )}
         /> */}
         <ListBox>
-          {isLoading && <Loader />}
+          {isLoading && !error && <Loader />}
           {!isLoading && !error && (
             <MovieList movies={movies} onSelectMovie={handleSelectMovie} />
           )}
-          {error && <ErrorMessage message={error} />}
+          {error && !isLoading && <ErrorMessage message={error} />}
+          {error && isLoading && <Instruction />}
         </ListBox>
         <ListBox>
           {selectedId ? (
