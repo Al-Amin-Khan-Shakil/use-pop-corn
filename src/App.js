@@ -20,7 +20,7 @@ export default function App() {
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const [query, setQuery] = useState('Avengers');
+  const [query, setQuery] = useState('');
   const [selectedId, setSelectedId] = useState(null);
 
   const handleSelectMovie = (id) => {
@@ -74,6 +74,7 @@ export default function App() {
       setError('');
     }
 
+    handleCloseMovie();
     fetchMovies();
 
     return () => {
