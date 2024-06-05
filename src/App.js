@@ -17,11 +17,16 @@ const KEY = 'c9ea9aa0';
 
 export default function App() {
   const [movies, setMovies] = useState([]);
-  const [watched, setWatched] = useState([]);
+  // const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [query, setQuery] = useState('');
   const [selectedId, setSelectedId] = useState(null);
+
+  const [watched, setWatched] = useState(() => {
+    const storedValue = localStorage.getItem('watched');
+    return JSON.parse(storedValue);
+  });
 
   const handleSelectMovie = (id) => {
     setSelectedId((selectedId) => (id === selectedId ? null : id));
@@ -38,6 +43,10 @@ export default function App() {
   const handleDeleteWatched = (id) => {
     setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
   };
+
+  useEffect(() => {
+    localStorage.setItem('watched', JSON.stringify(watched));
+  }, [watched]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -65,6 +74,7 @@ export default function App() {
           setIsLoading(true);
         } else {
           setError(err.message);
+          setIsLoading(false);
         }
       }
     };
@@ -81,6 +91,8 @@ export default function App() {
       controller.abort();
     };
   }, [query]);
+
+  console.log(query);
 
   return (
     <>
@@ -104,8 +116,8 @@ export default function App() {
           {!isLoading && !error && (
             <MovieList movies={movies} onSelectMovie={handleSelectMovie} />
           )}
-          {error && !isLoading && <ErrorMessage message={error} />}
-          {error && isLoading && <Instruction />}
+          {error && !isLoading && query && <ErrorMessage message={error} />}
+          {error && !isLoading && !query && <Instruction />}
         </ListBox>
         <ListBox>
           {selectedId ? (
