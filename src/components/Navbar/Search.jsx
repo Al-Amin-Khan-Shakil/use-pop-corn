@@ -5,7 +5,9 @@ export default function Search({ query, setQuery }) {
 
   useEffect(() => {
     const callback = (e) => {
-      if (e.code === 'Enter') {
+      if (document.activeElement === inputEl.current) return;
+
+      if (/^[a-zA-Z]$/.test(e.key)) {
         inputEl.current.focus();
       }
     };
