@@ -83,11 +83,11 @@ export default function MovieDetails({
 
   useEffect(() => {
     if (title) {
-      document.title = `Movie : ${title}`;
+      document.title = `Movie | ${title}`;
     }
 
     return () => {
-      document.title = 'usePopCorn';
+      document.title = 'usePopcorn';
     };
   }, [title]);
 

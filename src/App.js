@@ -46,15 +46,6 @@ export default function App() {
         <NumResult movies={movies} />
       </Navbar>
       <Main>
-        {/* <ListBox element={<MovieList movies={movies} />} />
-        <ListBox
-          element={(
-            <>
-              <WatchedSummary watched={watched} />
-              <WatchedMovieList watched={watched} />
-            </>
-          )}
-        /> */}
         <ListBox>
           {isLoading && !error && <Loader />}
           {!isLoading && !error && (
